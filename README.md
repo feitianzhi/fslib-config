@@ -43,8 +43,7 @@ github   https://github.com/feitianzhi/fslib-config
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于假设“小雉配置”采用面向属性的配置设计方式，把配置项分为节点型、模板、字符串、整型、浮点和二进制共6种数据类型，每种数据类型可设置多个条件组，以条件组内的所有条件为真此条件组为真，任何一个条件组为真则参数有效；
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“小雉配置”采用C语言编写，可用于windows,linux,arm等平台，配置为单文件，本地可拷贝备份，远程可热导入导出xml和json,配置可承载数千参数（结构可类似xml任意层级嵌套）数十万级别的量（类比一张表有上千列，表可以容纳数十万行）；
 
-
-####**小雉配置数据类型**
+#### **小雉配置数据类型**
 ------
 1. 节点型类型
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类似于xml中的a->b->c,其中b节点包含c,则b为节点型类型，且a下面有且只能有一个b；节点型类型可以作为节点型节点和模板节点的子类型，可以设置中文名、注释、条件判断，不能设置默认值，可选值；
@@ -71,8 +70,7 @@ github   https://github.com/feitianzhi/fslib-config
     fs_Config_node_binary_add //添加二进制类型参数
     fs_Config_node_binary_get_first //获取二进制类型参数
 
-----------
-**小雉配置的简单演示**
+#### **小雉配置的简单演示**
 ------
 
     int main() {
