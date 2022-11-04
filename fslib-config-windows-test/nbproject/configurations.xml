@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="PublicTools" displayName="PublicTools" projectFiles="true">
+      <logicalFolder name="Fs" displayName="Fs" projectFiles="true">
+        <itemPath>PublicTools/Fs/Calculation.h</itemPath>
+        <itemPath>PublicTools/Fs/Config.h</itemPath>
+        <itemPath>PublicTools/Fs/Ebml.h</itemPath>
+        <itemPath>PublicTools/Fs/FileTool.h</itemPath>
+        <itemPath>PublicTools/Fs/Json.h</itemPath>
+        <itemPath>PublicTools/Fs/Log.h</itemPath>
+        <itemPath>PublicTools/Fs/Memery.h</itemPath>
+        <itemPath>PublicTools/Fs/Network.h</itemPath>
+        <itemPath>PublicTools/Fs/Object.h</itemPath>
+        <itemPath>PublicTools/Fs/ObjectList.h</itemPath>
+        <itemPath>PublicTools/Fs/Router.h</itemPath>
+        <itemPath>PublicTools/Fs/Socket.h</itemPath>
+        <itemPath>PublicTools/Fs/String.h</itemPath>
+        <itemPath>PublicTools/Fs/StringBuilder.h</itemPath>
+        <itemPath>PublicTools/Fs/StringList.h</itemPath>
+        <itemPath>PublicTools/Fs/SystemInfo.h</itemPath>
+        <itemPath>PublicTools/Fs/Time.h</itemPath>
+        <itemPath>PublicTools/Fs/Xml.h</itemPath>
+      </logicalFolder>
+      <itemPath>PublicTools/publicDefine.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="HeaderFiles" displayName="头文件" projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles" displayName="源文件" projectFiles="true">
+      <itemPath>main.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles" displayName="资源文件" projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="测试文件"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="重要文件"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>Main</Elem>
+    <Elem>PublicTools</Elem>
+    <Elem>Modules</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="mingw64-Release" type="1">
+      <toolsSet>
+        <compilerSet>MinGW64|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>6</developmentMode>
+          <incDir>
+            <pElem>PublicTools/Fs/mman</pElem>
+          </incDir>
+          <commandLine>-D_GNU_SOURCE -ffunction-sections</commandLine>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <incDir>
+            <pElem>PublicTools/Fs/mman</pElem>
+          </incDir>
+          <commandLine>-ffunction-sections</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <output>./libfslib-config-test.exe</output>
+          <linkerLibItems>
+            <linkerLibFileItem>libfslib-config.dll</linkerLibFileItem>
+          </linkerLibItems>
+          <commandLine>-Wl,--gc-sections,-rpath,'$$ORIGIN' -liconv -ldl -lwsock32 -lws2_32</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="PublicTools/Fs/Calculation.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Ebml.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/FileTool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Json.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Memery.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Network.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Object.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/ObjectList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Router.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Socket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/String.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/StringBuilder.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/StringList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/SystemInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Xml.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/publicDefine.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+    <conf name="mingw64-Debug" type="1">
+      <toolsSet>
+        <compilerSet>MinGW64|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>PublicTools/Fs/mman</pElem>
+          </incDir>
+          <commandLine>-D_GNU_SOURCE -ffunction-sections</commandLine>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>PublicTools/Fs/mman</pElem>
+          </incDir>
+          <commandLine>-ffunction-sections</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>./libfslib-config-test.exe</output>
+          <linkerLibItems>
+            <linkerLibFileItem>libfslib-config.dll</linkerLibFileItem>
+          </linkerLibItems>
+          <commandLine>-Wl,--gc-sections,-rpath,'$$ORIGIN' -liconv -ldl -lwsock32 -lws2_32</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="PublicTools/Fs/Calculation.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Ebml.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/FileTool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Json.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Memery.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Network.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Object.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/ObjectList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Router.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Socket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/String.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/StringBuilder.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/StringList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/SystemInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/Fs/Xml.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PublicTools/publicDefine.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
