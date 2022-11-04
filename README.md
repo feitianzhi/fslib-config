@@ -3,7 +3,7 @@
 
 #### 基于“小雉视频系统”中的配置组件构建
 github   http://www.feitianzhi.com/  
-国内下载   http://www.feitianzhi.com/  
+gitee   http://www.feitianzhi.com/  
  
 #### **介绍**
 小雉配置简介
@@ -12,7 +12,7 @@ github   http://www.feitianzhi.com/
 
 QQ交流群：869598376  
 github   https://github.com/feitianzhi/fslib-config  
-国内下载   https://gitee.com/feitianzhi/fslib-config  
+gitee   https://gitee.com/feitianzhi/fslib-config  
 
 #### **需求分析**
 ------
