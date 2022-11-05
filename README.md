@@ -171,5 +171,6 @@ gitee   https://gitee.com/feitianzhi/fslib-config
     fs_Config_delete__OI(pConfig, NULL);
     return 0;
     }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码生成了"test.cfg"和"test1.cfg"两份配置文件,可在[http://www.feitianzhi.com/boke/index.php/ziyuanxiazai.html][1]页面下载"小雉系统工具"打开配置文件,该项目上传的"含有上千字段的综合配置演示实例.cfg"为"小雉视频系统"使用该配置模块创建的配置文件,也可以使用"小雉系统工具"打开编辑；
 
-
+  [1]: http://www.feitianzhi.com/boke/index.php/ziyuanxiazai.html
