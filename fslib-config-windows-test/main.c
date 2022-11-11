@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
         fs_Xml_analyzeAll(pXml, (struct FsXml_node*) pXml, NULL);
         FsEbml *pEbml1 = fs_Ebml_new_from_Xml__IO(pXml);
         fs_Xml_delete__OI(pXml, NULL);
-        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pEbml1, (struct FsEbml_node*) pEbml1, NULL);
+        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pEbml1, (struct FsEbml_node*) pEbml1,0xFFFFFFFFFFFFFFFFLLU, NULL);
         fs_Ebml_delete__OI(pEbml1, NULL);
     }
     // 当前pConfig已包含导入的数据,可存盘
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
     // 读取历史的配置文件"test1.cfg",按目前在申明导入到pConfig中
     {
         FsConfig * const pConfig1 = fs_Config_new_from_file__IO("test1.cfg", NULL);
-        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pConfig1, (struct FsEbml_node*) pConfig1, NULL);
+        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pConfig1, (struct FsEbml_node*) pConfig1, 0xFFFFFFFFFFFFFFFFLLU,NULL);
         fs_Config_delete__OI(pConfig1, NULL);
     }
     /* 把pConfig导出为json */

@@ -482,9 +482,9 @@ extern "C" {
     void fs_Ebml_node_delete_by_name_first(FsEbml * const pEbml, /* 要查找的的节点,在根节点下查找请把pEbml强制转换为FsEbml_node传入 */struct FsEbml_node * pEbml_node, /* 要删除的节点名 */const char name[]
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
-    /* 删除pEbml_node下名为name的直接子节点,pEbml_node必须已解析,没解析的内容不会被查找 */
+    /* 删除pEbml_node下名为name的直接子节点,pEbml_node必须已解析,没解析的内容不会被查找,返回删除的节点数量 */
 
-    void fs_Ebml_node_delete_direct_child(FsEbml * const pEbml, /* 要查找的的节点,在根节点下查找请把pEbml强制转换为FsEbml_node传入 */struct FsEbml_node * const pEbml_node, /* 要删除的节点名 */const char name[]
+    unsigned int fs_Ebml_node_delete_direct_child(FsEbml * const pEbml, /* 要查找的的节点,在根节点下查找请把pEbml强制转换为FsEbml_node传入 */struct FsEbml_node * const pEbml_node, /* 要删除的节点名 */const char name[]
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 调整*ppEbml_node节点空间的大小 */
@@ -606,6 +606,11 @@ extern "C" {
 
     int fs_Ebml_node_get_child_index_byName(/* 在哪个节点下查找,在根节下查找请把pEbml强制转换为FsEbml_node传入 */ struct FsEbml_node * const pEbml_node
             , /* 查找的开始下标,必须为有效下标,从0开始 */ int begin, /* 查找的结束下标,必须为有效下标,从0开始 */ int end, /* 直接子节点名 */const char name[]);
+
+    /* 在已解析的节点pEbml_node下查找直接子节点的第一个下标,成功返回找到的第一个目标,失败返回NULL */
+
+    struct FsEbml_node * fs_Ebml_node_get_child_byName(/* 在哪个节点下查找,在根节下查找请把pEbml强制转换为FsEbml_node传入 */const struct FsEbml_node * const pEbml_node
+            , /* 查找的开始下标,必须为有效下标,从0开始 */unsigned int begin, /* 查找的结束下标,必须为有效下标,从0开始 */unsigned int end, /* 直接子节点名 */const char name[]);
 
     /* 
      * 获取pEbml中第一个名为nodeName的节点,支持多节点查找,用空格分开,如a b表示查找第一个a节点下的第一个b节点的值;

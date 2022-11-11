@@ -220,6 +220,18 @@ extern "C" {
      */
     int fs_ObjectList_insert_head_all_pthreadSafety(FsObjectList * const pObjectList, /* 不能为空且节点数可为0 */const FsObjectList * const pInsertList_);
     /*
+     * 把pInsertList中的所有节点全部插到pObjectList的头部,并清空pInsertList;
+     * 如果成功返回1;
+     * 如果列表不够长进行了空间扩展，返回2.
+     */
+    int fs_ObjectList_insert_head_all_clean(FsObjectList * const pObjectList_, /* 不能为空且节点数可为0 */ FsObjectList * const pInsertList_);
+    /*
+     * 把pInsertList中的所有节点全部线程安全地插到pObjectList的头部,并清空pInsertList;
+     * 如果成功返回1;
+     * 如果列表不够长进行了空间扩展，返回2.
+     */
+    int fs_ObjectList_insert_head_all_clean_pthreadSafety(FsObjectList * const pObjectList, /* 不能为空且节点数可为0 */ FsObjectList * const pInsertList_);
+    /*
      * 把node插到pObjectList的尾部;
      * 如果成功返回1;
      * 如果列表不够长进行了空间扩展，返回2;
@@ -262,7 +274,7 @@ extern "C" {
      * 如果成功返回1;
      * 如果列表不够长进行了空间扩展，返回2.
      */
-    int fs_ObjectList_insert_tail_all_clean(FsObjectList * const pObjectList, /* 不能为空且节点数可为0 */ FsObjectList * const pInsertList);
+    int fs_ObjectList_insert_tail_all_clean(FsObjectList * const pObjectList_, /* 不能为空且节点数可为0 */ FsObjectList * const pInsertList_);
     /*
      * 把pInsertList中的所有节点全部线程安全地插到pObjectList的尾部,并清空pInsertList;
      * 如果成功返回1;

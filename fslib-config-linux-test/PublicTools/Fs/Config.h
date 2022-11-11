@@ -166,7 +166,16 @@ extern "C" {
     /* 条件多值或后再按位与,结果为0为真,适用于整数 */
 #define FsConfig_Condition_orAnd_false "!|&"
 
-    /* 程序配置信息结构,节点名不能以$开头 */
+    /* 
+     * 程序配置信息结构,节点名不能以$开头,以两个$打头的字符串为属性,以一个$打头的字符串为模板;
+     * 权限设计:
+     *     每个字段均带一个权限位a0,如用户拥有的权限(a&a0)==a0,则表示用户有此字段的读写权限,对于无权限的字段不可写;
+     *     每个字段可以带一个读权限位白r0,如用户拥有的权限(a&r0)==r0,则表示用户有此字段读的权限;
+     * 用户设计:
+     *     用户可在传递的格式化文件中增加ConnectAuth节点,未传递使用连接的历史用户名和权限;
+     *     在ConnectAuth节点中增加ConnectUser和ConnectPassword字段传递用户名和密码;
+     *     在ConnectAuth节点中可增加ConnectPasswordEncryptionMethod字段指定ConnectPassword的产生方法(对于加密需要的附加字段也存放于ConnectAuth节点中);
+     */
     typedef struct {
         /* 继承FsEbml的所有特性 */
         FsEbml ebml;
@@ -365,7 +374,7 @@ extern "C" {
 
     /* 设置pNode及父节点的校验和为无效值 */
 
-    void fs_Config_node_set_sum_invalid(FsConfig * const pConfig, /* pNode对应的描述节点,NULL表示需要内部查找 */ struct FsEbml_node * pNode);
+    void fs_Config_node_set_sum_invalid(FsEbml * const pEbml, /* pNode对应的描述节点,NULL表示需要内部查找 */ struct FsEbml_node * pNode);
 
     /* 
      * 获取值的校验和,用于2进制数据,返回校验和长度;
@@ -432,12 +441,13 @@ extern "C" {
             , /* 注释 */const char comment[], /* 分布式的主机节点索引,节点必须在内部,为相对于本节点的节点,为空表示不支持分布式 */ const char distributedHostName[]
             , /* 分布式的主机节点的外部地址索引,仅在distributedHostName不为空时有效,节点必须在内部,为相对于本节点的节点,为空表示使用distributedHostName的值 */ const char distributedHostAddr[]
             , /* 时间控制节点索引,节点必须在内部,为相对于本节点的节点,为空表示所有时间有效,当模板的所实例在某时间点都无效时,最后一个强制有效,对指定了此值的获取值时对于同一分布式节点返回第一个合适的节点 */ const char timerControl[]
-            , /* 权限,为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
+            , /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
             , /* 值的最多个数,这里指可实例的最大模板数 */const unsigned int valueCountMax);
 
-    /* 获取pNode节点的注释,返回数据在共享buffer中的偏移量 */
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
-    unsigned int fs_Config_node_template_get_comment(const FsConfig * const pConfig, /* 描述节点,不能把pConfig传入 */const void *const pNode0
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
+    unsigned int fs_Config_node_template_get_comment(const FsConfig * const pConfig, /* 描述节点,不能把pConfig传入 */const struct FsEbml_node * const pNode0
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 获取模板型节点,无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
@@ -490,9 +500,9 @@ extern "C" {
 
     void *fs_Config_node_node_add(FsConfig * const pConfig, /* 父节点,没有请把pConfig传入 */void *const parentNode,
             /* 节点名,用于查找,不能重复 */const char nodeName[], /* 显示名 */const char viewName[], /* 注释 */const char comment[],
-            /* 权限,为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write);
+            /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write);
 
-    /* 获取pNode节点的注释,返回数据在共享buffer中的偏移量 */
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
     unsigned int fs_Config_node_node_get_comment(const FsConfig * const pConfig, /* 描述节点,不能把pConfig传入 */const void *const pNode0
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
@@ -507,7 +517,7 @@ extern "C" {
 
     void *fs_Config_node_string_add(FsConfig *pConfig, /* 父节点,没有请把pConfig传入 */void *parentNode
             , /* 节点名,用于查找,不能重复 */const char nodeName[], /* 显示名 */const char viewName[], /* 注释 */const char comment[]
-            , /* 权限,为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
+            , /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
             , /* 最小长度 */const unsigned int min, /* 最大长度 */const unsigned int max, /* 值的最多个数 */const unsigned int valueCountMax);
 
     /* 为String节点增加默认值 */
@@ -523,7 +533,7 @@ extern "C" {
 
     /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
-    unsigned int fs_Config_node_string_get_comment(const FsConfig * const pConfig, /* 描述节点,不能把pConfig传入 */const void *const pNode0
+    unsigned int fs_Config_node_string_get_comment(const FsConfig * const pConfig, /* 描述节点,不能把pConfig传入 */const struct FsEbml_node * const pNode0
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 获取string节点值的所有值,无或失败返回NULL,返回链表中储存的是FsString指针,FsString指针的空间属于pConfig */
@@ -607,7 +617,7 @@ extern "C" {
 
     void *fs_Config_node_integer_add(FsConfig * const pConfig, /* 父节点,没有请把pConfig传入 */void *const parentNode
             , /* 节点名,用于查找,不能重复 */const char nodeName[], /* 显示名 */const char viewName[], /* 注释 */const char comment[], /* 显示方式,请用宏定义 */const char showType[]
-            , /* 权限,为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
+            , /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
             , /* 最小值 */const long long min, /* 最大值 */const long long max, /* 值的最多个数 */const unsigned int valueCountMax);
 
     /* 为int节点增加默认值 */
@@ -621,9 +631,9 @@ extern "C" {
             , /* 设置值的类型,0-更新,1-增加,-1-删除 */const signed char setType, /* 在setType为0时,修改第几个的值 */ unsigned int updateIndex
             , /* 设置的值 */ const long long value, /* 出错时的回调信息,为空不回调 */void (*const cb_error) (/* 错误信息 */const char errordata[], void *externP), /* 出错回调时的外部参数 */ void *const cb_errorP);
 
-    /* 获取pNode节点的注释,返回数据在共享buffer中的偏移量 */
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
-    unsigned int fs_Config_node_integer_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const void *const pNode
+    unsigned int fs_Config_node_integer_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const struct FsEbml_node * const pNode0
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
 
@@ -651,7 +661,7 @@ extern "C" {
 
     void *fs_Config_node_float_add(FsConfig * const pConfig, /* 父节点,没有请把pConfig传入 */void *const parentNode,
             /* 节点名,用于查找,不能重复 */const char nodeName[], /* 显示名 */const char viewName[], /* 注释 */const char comment[],
-            /* 权限,为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write,
+            /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write,
             /* 最小值 */const double min, /* 最大值 */const double max, /* 值的最多个数 */const unsigned int valueCountMax);
 
     /* 为float节点增加默认值 */
@@ -665,9 +675,9 @@ extern "C" {
             , /* 设置值的类型,0-更新,1-增加,-1-删除 */const signed char setType, /* 在setType为0时,修改第几个的值 */ unsigned int updateIndex
             , /* 设置的值 */ const double value, /* 出错时的回调信息,为空不回调 */void (*const cb_error) (/* 错误信息 */const char errordata[], void *externP), /* 出错回调时的外部参数 */ void *const cb_errorP);
 
-    /* 获取pNode节点的注释,返回数据在共享buffer中的偏移量 */
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
-    unsigned int fs_Config_node_float_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const void *const pNode
+    unsigned int fs_Config_node_float_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const struct FsEbml_node * const pNode0
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 获取float节点的所有值,无或失败返回NULL,返回链表中储存的是FsString指针,FsString指针的空间属于pConfig */
@@ -689,7 +699,7 @@ extern "C" {
 
     void *fs_Config_node_binary_add(FsConfig * const pConfig, /* 父节点,没有请把pConfig传入 */void *const parentNode
             , /* 节点名,用于查找,不能重复 */const char nodeName[], /* 显示名 */const char viewName[], /* 注释 */const char comment[]
-            , /* 权限,为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
+            , /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority, /* 写权限,0x1可读,0x2可选,0x4可写 */const unsigned int write
             , /* 最小长度 */const unsigned long long min, /* 最大长度 */const unsigned long long max, /* 值的最多个数 */const unsigned int valueCountMax);
 
     /* 设置binary的节点值,成功返回1,失败返回-1 */
@@ -698,9 +708,9 @@ extern "C" {
             , /* 设置值的类型,0-更新,1-增加,-1-删除 */const signed char setType, /* 在setType为0时,修改第几个的值 */ unsigned int updateIndex
             , /* 设置的值 */ const char value[], /* 值的长度 */const unsigned int valueLen, /* 出错时的回调信息,为空不回调 */void (*const cb_error) (/* 错误信息 */const char errordata[], void *externP), /* 出错回调时的外部参数 */ void *const cb_errorP);
 
-    /* 获取pNode节点的注释,返回数据在共享buffer中的偏移量 */
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
-    unsigned int fs_Config_node_binary_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const void *const pNode
+    unsigned int fs_Config_node_binary_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const struct FsEbml_node * const pNode0
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 获取二进制节点的所有值,无或失败返回NULL,返回链表中储存的是FsString指针,FsString指针的空间属于pConfig */
@@ -716,9 +726,9 @@ extern "C" {
             , /* 查找的节点名,用于空格隔开,为空表示无须查找 */const char nodeName[], /* 不为空,表示指向与nodeName关联的类型节点 */const struct FsEbml_node * type);
 
 
-    /* 获取pNode节点的注释,返回数据在共享buffer中的偏移量 */
+    /* 获取pNode0节点的注释,返回数据在共享buffer中的偏移量 */
 
-    unsigned int fs_Config_node_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const void *const pNode, /* 不为空,表示type储存pNode的类型 */struct FsEbml_node *type
+    unsigned int fs_Config_node0_get_comment(const FsConfig * const pConfig, /* 节点,不能把pConfig传入 */const struct FsEbml_node * const pNode0, /* 不为空,表示type储存pNode的类型 */struct FsEbml_node *type
             , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 添加条件组,组内部必须所有的条件都为真,该组的值才为真,组之间只要有一个为真结果就为真 */
@@ -767,28 +777,28 @@ extern "C" {
     FsStringList * fs_Config_distributed_host_get__IO(const FsConfig * const pConfig, /* parentNode对应的描述节点,NULL表示需要内部查找 */const void * const parentNode0
             , /* 父节点,没有请把pConfig传入 */const void *const parentNode);
 
-    /* 用用户数据导入配置,不会失败,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数 */
+    /* 用用户数据导入配置,userConfig必须是已完整解析的对象,userConfig必须是已完整解析的对象,不会失败,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数,0-表示没有导入节点,1-表示导入了节点 */
 
-    void fs_Config_import(/* 默认配置 */FsEbml * const pEbml, /* 导入的节点,没有请把pConfig传入,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数 */struct FsEbml_node * const pNode
-            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * const userNode
+    unsigned int fs_Config_import(/* 默认配置 */FsEbml * const pEbml, /* 导入的节点,没有请把pConfig传入,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数 */struct FsEbml_node * pNode
+            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */ const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * userNode, /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
-    /* 用用户数据导入配置,不会失败,只包含值的节点,无描述信息,返回是否有导入节点,0-表示没有导入节点,1-表示导入了节点 */
+    /* 用用户数据导入配置,userConfig必须是已完整解析的对象,userConfig必须是已完整解析的对象,userConfig必须是已完整解析的对象,不会失败,只包含值的节点,无描述信息,返回是否有导入节点,0-表示没有导入节点,1-表示导入了节点 */
 
-    int fs_Config_import_onlyData(/* 默认配置 */FsEbml * const pEbml, /* pNode对应的描述节点,NULL表示需要内部查找 */ const struct FsEbml_node * pNode0, /* 导入的节点,没有请把pConfig传入 */struct FsEbml_node * const pNode
-            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * const userNode
+    unsigned int fs_Config_import_onlyData(/* 默认配置 */FsEbml * const pEbml, /* pNode对应的描述节点,NULL表示需要内部查找 */ const struct FsEbml_node * pNode0, /* 导入的节点,没有请把pConfig传入 */struct FsEbml_node * pNode
+            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * userNode, /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
-    /* 用用户数据合并配置,不会失败,遇到有冲突的数据使用用户数据替换,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数 */
+    /* 用用户数据合并配置,userConfig必须是已完整解析的对象,不会失败,遇到有冲突的数据使用用户数据替换,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数,0-表示没有导入节点,1-表示导入了节点 */
 
-    void fs_Config_merge(/* 默认配置 */FsEbml * const pEbml, /* 合并的节点,没有请把pConfig传入,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数 */struct FsEbml_node * const pNode
-            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * const userNode
+    unsigned int fs_Config_merge(/* 默认配置 */FsEbml * const pEbml, /* 合并的节点,没有请把pConfig传入,使用fs_Config_import_onlyData和fs_Config_merge_onlyData操作过的节点不能使用此函数 */struct FsEbml_node * pNode
+            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * userNode, /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
-    /* 用用户数据合并配置,不会失败,遇到有冲突的数据使用用户数据替换,只包含值的节点,无描述信息,返回是否有导入节点,0-表示没有导入节电,1-表示导入了节点 */
+    /* 用用户数据合并配置,userConfig必须是已完整解析的对象,不会失败,遇到有冲突的数据使用用户数据替换,只包含值的节点,无描述信息,返回是否有导入节点,0-表示没有导入节电,1-表示导入了节点 */
 
-    int fs_Config_merge_onlyData(/* 默认配置 */FsEbml * const pEbml, /* pNode对应的描述节点,NULL表示需要内部查找 */ const struct FsEbml_node * pNode0, /* 导入的节点,没有请把pConfig传入 */struct FsEbml_node * const pNode
-            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * const userNode
+    unsigned int fs_Config_merge_onlyData(/* 默认配置 */FsEbml * const pEbml, /* pNode对应的描述节点,NULL表示需要内部查找 */ const struct FsEbml_node * pNode0, /* 导入的节点,没有请把pConfig传入 */struct FsEbml_node * pNode
+            , /* 用户配置,不一定要包含完整数据,支持FsConfig和FsEbml */const FsEbml * const userConfig, /* 导入对应的用户节点 */const struct FsEbml_node * userNode, /* 写权限(有写权限肯定有读权限),为0表示所有用户都有权限 */ const unsigned long long authority
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 获取pEbml中pNode节点的校验和 */
