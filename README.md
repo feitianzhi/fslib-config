@@ -1,18 +1,20 @@
 
 # 小雉配置
 
+#### 项目地址
+官网     http://www.feitianzhi.com/  
+github  https://github.com/feitianzhi/fslib-config    
+gitee   https://gitee.com/feitianzhi/fslib-config    
+QQ交流群：[869598376](https://jq.qq.com/?_wv=1027&k=47x6kh7 "小雉配置")
+
 #### 基于“小雉视频系统”中的配置组件构建
-github   http://www.feitianzhi.com/  
-gitee   http://www.feitianzhi.com/  
+github  https://github.com/feitianzhi/zos-open    
+gitee   https://gitee.com/feitianzhi/zos-open    
  
 #### **介绍**
 小雉配置简介
 
 “小雉配置”为解决“小雉视频系统”项目中遇到的实际问题而开发的通用配置模块,旨在实现一种模块化配置,支持配置字段任意增删嵌套也能保持配置前后兼容的算法,满足“小雉视频系统”的未知开发需求(后期要增加的功能,ai算法是未知的,功能及ai算法需要的参数未知,有更优秀算法时已有算法需要被移除,其对应参数也应被删除)。
-
-QQ交流群：869598376  
-github   https://github.com/feitianzhi/fslib-config  
-gitee   https://gitee.com/feitianzhi/fslib-config  
 
 #### **需求分析**
 ------
