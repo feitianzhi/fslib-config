@@ -1,11 +1,10 @@
-
 # 小雉配置
 
 #### 项目地址
 官网     http://www.feitianzhi.com/  
 github  https://github.com/feitianzhi/fslib-config    
 gitee   https://gitee.com/feitianzhi/fslib-config    
-QQ交流群：[869598376](https://jq.qq.com/?_wv=1027&k=47x6kh7 "小雉配置")
+QQ交流群：[869598376](http://www.feitianzhi.com/ "小雉配置")
 
 #### 基于“小雉视频系统”中的配置组件构建
 github  https://github.com/feitianzhi/zos-open    
