@@ -149,21 +149,21 @@ extern "C" {
 #define FsConfig_Condition_equal "=="
     /* 条件不等于,适用于数字和字符串及二进制(base64编码后判断) */
 #define FsConfig_Condition_equal_false "!="
-    /* 条件大于,适用于数字 */
+    /* 条件大于,适用于数字,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_greater ">"
-    /* 条件大于等于,适用于数字 */
+    /* 条件大于等于,适用于数字,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_greaterOrEqual ">="
-    /* 条件小于,适用于数字 */
+    /* 条件小于,适用于数字,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_less "<"
-    /* 条件小于等于,适用于数字 */
+    /* 条件小于等于,适用于数字,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_lessOrEqual "<="
-    /* 条件按位与,适用于整数 */
+    /* 条件按位与,适用于整数,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_and "&"
-    /* 条件按位与,结果为0为真,适用于整数 */
+    /* 条件按位与,结果为0为真,适用于整数,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_and_false "!&"
-    /* 条件多值或后再按位与,适用于整数 */
+    /* 条件多值或后再按位与,适用于整数,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_orAnd "|&"
-    /* 条件多值或后再按位与,结果为0为真,适用于整数 */
+    /* 条件多值或后再按位与,结果为0为真,适用于整数,数字使用16进制表示时按无符号处理 */
 #define FsConfig_Condition_orAnd_false "!|&"
 
     /* 
@@ -454,13 +454,15 @@ extern "C" {
 
     FsObjectList * fs_Config_node_template__IO(FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
             , /* 父节点,没有请把pConfig传入 */const void * parentNode
+            , /* 在设置了时间控制参数时,0-表示仅获取第一项有效的(均无效返回第一项),1-表示仅获取第一项有效的(均无效返回空),2-表示仅获取所有有效的(均无效返回第一项),3-表示仅获取所有有效的(均无效返回空) */const unsigned char timerControlType
             , /* 本地ip地址,不为空时返回用此值过滤过的配置,为空表示返回所有主机的配置 */const FsArray * const ipList
             , /* 在ipList不为空时,0表示获取本地主机配置,为1表示获取远程主机配置 */const unsigned char getCluster, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]);
 
-    /* 获取模板型节点(使用同组第一个节点位置排序),无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
+    /* 获取模板型节点(使用同组第一个节点位置排序,有timerControl时可保证顺序),无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
 
     FsObjectList * fs_Config_node_template_orderFirst__IO(FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
             , /* 父节点,没有请把pConfig传入 */const void * parentNode
+            , /* 在设置了时间控制参数时,0-表示仅获取第一项有效的(均无效返回第一项),1-表示仅获取第一项有效的(均无效返回空),2-表示仅获取所有有效的(均无效返回第一项),3-表示仅获取所有有效的(均无效返回空) */const unsigned char timerControlType
             , /* 本地ip地址,不为空时返回用此值过滤过的配置,为空表示返回所有主机的配置 */const FsArray * const ipList
             , /* 在ipList不为空时,0表示获取本地主机配置,为1表示获取远程主机配置 */const unsigned char getCluster, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]);
 
@@ -468,14 +470,16 @@ extern "C" {
 
     FsObjectList * fs_Config_node_template_skip__IO(FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
             , /* 父节点,没有请把pConfig传入 */const void * parentNode
+            , /* 在设置了时间控制参数时,0-表示仅获取第一项有效的(均无效返回第一项),1-表示仅获取第一项有效的(均无效返回空),2-表示仅获取所有有效的(均无效返回第一项),3-表示仅获取所有有效的(均无效返回空) */const unsigned char timerControlType
             , /* 本地ip地址,不为空时返回用此值过滤过的配置,为空表示返回所有主机的配置 */const FsArray * const ipList
             , /* 在ipList不为空时,0表示获取本地主机配置,为1表示获取远程主机配置 */const unsigned char getCluster, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]
             , /* 忽略多少个节点不返回 */ unsigned int skip, /* 最多返回多少个结果 */unsigned int count);
 
-    /* 获取模板型节点,忽略头部节点,返回有限数量的节点(使用同组第一个节点位置排序),无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
+    /* 获取模板型节点,忽略头部节点,返回有限数量的节点(使用同组第一个节点位置排序,有timerControl时可保证顺序),无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
 
     FsObjectList * fs_Config_node_template_skip_orderFirst__IO(FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
             , /* 父节点,没有请把pConfig传入 */const void * parentNode
+            , /* 在设置了时间控制参数时,0-表示仅获取第一项有效的(均无效返回第一项),1-表示仅获取第一项有效的(均无效返回空),2-表示仅获取所有有效的(均无效返回第一项),3-表示仅获取所有有效的(均无效返回空) */const unsigned char timerControlType
             , /* 本地ip地址,不为空时返回用此值过滤过的配置,为空表示返回所有主机的配置 */const FsArray * const ipList
             , /* 在ipList不为空时,0表示获取本地主机配置,为1表示获取远程主机配置 */const unsigned char getCluster, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]
             , /* 忽略多少个节点不返回 */ unsigned int skip, /* 最多返回多少个结果 */unsigned int count);
@@ -484,14 +488,16 @@ extern "C" {
 
     const void * fs_Config_node_template_get(FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
             , /* 父节点,没有请把pConfig传入 */const void * parentNode
+            , /* 在设置了时间控制参数时,0-表示仅获取第一项有效的(均无效返回第一项),1-表示仅获取第一项有效的(均无效返回空),2-表示仅获取所有有效的(均无效返回第一项),3-表示仅获取所有有效的(均无效返回空) */const unsigned char timerControlType
             , /* 本地ip地址,不为空时返回用此值过滤过的配置,为空表示返回所有主机的配置 */const FsArray * const ipList
             , /* 在ipList不为空时,0表示获取本地主机配置,为1表示获取远程主机配置 */const unsigned char getCluster, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]
             , /* 返回节点的下标,从0开始 */unsigned int skip);
 
-    /* 获取模板型节点,只获取匹配的下标为skip的节点(使用同组第一个节点位置排序),无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
+    /* 获取模板型节点,只获取匹配的下标为skip的节点(使用同组第一个节点位置排序,有timerControl时可保证顺序),无或失败返回NULL,修改timerUptime时会用到ebml中的互斥锁 */
 
     const void * fs_Config_node_template_get_orderFirst(FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
             , /* 父节点,没有请把pConfig传入 */const void * parentNode
+            , /* 在设置了时间控制参数时,0-表示仅获取第一项有效的(均无效返回第一项),1-表示仅获取第一项有效的(均无效返回空),2-表示仅获取所有有效的(均无效返回第一项),3-表示仅获取所有有效的(均无效返回空) */const unsigned char timerControlType
             , /* 本地ip地址,不为空时返回用此值过滤过的配置,为空表示返回所有主机的配置 */const FsArray * const ipList
             , /* 在ipList不为空时,0表示获取本地主机配置,为1表示获取远程主机配置 */const unsigned char getCluster, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]
             , /* 返回节点的下标,从0开始 */unsigned int skip);
@@ -510,8 +516,26 @@ extern "C" {
     /* 获取节点型节点,也可以用于获取字符串,整数,浮点,二进制节点,不能用于获取模板型节点,无或失败返回NULL */
 
     const void *fs_Config_node_get_first(const FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
-            , /* 父节点,没有请把pConfig传入 */const void *const parentNode
-            , /* 查找的节点名,用于空格隔开 */const char nodeName[]);
+            , /* 父节点,没有请把pConfig传入 */const void *const parentNode, /* 查找的节点名,用于空格隔开 */const char nodeName[]);
+
+    /* 获取节点型节点,也可以用于获取字符串,整数,浮点,二进制节点,不能用于获取模板型节点,并更新上下文,无或失败返回NULL */
+
+    const void *fs_Config_node_get_first_update_nodeParentList(/* 不为空时返回是否是无效节点,当*isDisabledNode为0时内部会查找,0-不是,1-是 */char *const isDisabledNode, const FsConfig * const pConfig
+            , /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0, /* parentNode的上下文,不包含parentNode */FsObjectList * const nodeParentList_
+            , /* 父节点,没有请把pConfig传入 */const struct FsEbml_node * parentNode, /* 查找的节点名,用于空格隔开 */const char nodeName[]
+            , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
+
+    /* 获取节点,最后一级节点不获取,无或失败返回NULL */
+
+    const void *fs_Config_node_get_first_skipLast(const FsConfig * const pConfig, /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0
+            , /* 父节点,没有请把pConfig传入 */const struct FsEbml_node * parentNode, /* 查找的节点名,用于空格隔开,除最后一级节点外不能有模板节点,pNodeName不为空,*pNodeName也不为空,成功时*pNodeName返回最后一节节点的指针 */const char * * const pNodeName);
+
+    /* 获取节点并更新上下文,最后一级节点不获取,并更新上下文,无或失败返回NULL */
+
+    const void *fs_Config_node_get_first_skipLast_update_nodeParentList(/* 不为空时返回是否是无效节点,当*isDisabledNode为0时内部会查找,0-不是,1-是 */char *const isDisabledNode, const FsConfig * const pConfig
+            , /* parentNode对应的描述节点,pParentNode0不为空在查找后通过*pParentNode0返回,*pParentNode0为NULL表示需要内部查找 */const void ** pParentNode0, /* parentNode的上下文,不包含parentNode */FsObjectList * const nodeParentList_
+            , /* 父节点,没有请把pConfig传入 */const struct FsEbml_node * parentNode, /* 查找的节点名,用于空格隔开,除最后一级节点外不能有模板节点,pNodeName不为空,*pNodeName也不为空,成功时*pNodeName返回最后一节节点的指针 */const char * * const pNodeName
+            , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 添加一个字符串节点,返回添加的节点,此类型读到的值是char*型 */
 
@@ -806,6 +830,12 @@ extern "C" {
     unsigned long long fs_Config_get_sum(FsEbml * const pEbml, /* 要计算校验和的根节点,没有请把pConfig传入 */struct FsEbml_node * const pNode);
 
 
+    /* 获取pConfig中nodeName节点当前时间有效实例的校验和 */
+
+    unsigned long long fs_Config_get_sum_timeControl(FsConfig * const pConfig, /* parentNode对应的描述节点,parentNode0为NULL表示需要内部查找 */const void * parentNode0
+            , /* 父节点,没有请把pConfig传入 */const void * parentNode, /* 查找的节点名,用空格隔开,除最后一级节点,前面节点不能为模板节点 */const char nodeName[]);
+
+
     /* 只导出自定义配置,把pNode的数据导出放dstNode下 */
 
     void fs_Config_export_simple(FsEbml * const dst, struct FsEbml_node * const dstNode, const FsConfig * const pConfig, /* pNode对应的描述节点,为NULL表示需要内部查找 */const void * pNode0, /* 导出的节点,全部导出,请把pConfig传入 */const void *const pNode);
@@ -923,68 +953,6 @@ extern "C" {
             , struct FsEbml_node * pos_node, /* 为空表示不用搜索,为pos_node */const char *const member_area_nodename
             , /* 比例尺,一个像素点代表的长度,X方向 */ const double zoomX, /* 比例尺,一个像素点代表的长度,Y方向 */ const double zoomY
             , /* 区域参考原点的x坐标 */ int x0, /* 区域参考原点的y坐标 */int y0);
-
-
-    /* 在pNode可被清理时去除pEbml中的pNode节点及其父节点,如父节点为endNode则不清除,pNode0可以不是pEbml的成员,返回处理的数量 */
-
-    unsigned int fs_Config_node_simple(FsEbml * const pEbml, struct FsEbml_node* pNode, /* pNode对应的描述节点 */struct FsEbml_node* pNode0, /* 截止节点 */ struct FsEbml_node * const endNode);
-
-    /* 在pNode可被清理时去除pEbml中的pNode节点及其父节点,如父节点为endNode则不清除,如遇*ppNode把*ppNode设置为其描述节点,pNode0可以不是pEbml的成员,返回处理的数量 */
-
-    unsigned int fs_Config_node_simple_change_ppNode(/* *ppNode可为&pNode */struct FsEbml_node* * const ppNode, FsEbml * const pEbml, struct FsEbml_node* pNode, /* pNode对应的描述节点 */struct FsEbml_node* pNode0, /* 截止节点 */ struct FsEbml_node * const endNode);
-
-    /* 在pNode可被清理时去除pEbml中的pNode节点及其父节点,如父节点为endNode则不清除,如遇*ppNode和*ppNode2把*ppNode和ppNode2设置为其描述节点,pNode0可以不是pEbml的成员,返回处理的数量 */
-
-    unsigned int fs_Config_node_simple_change_ppNode2(/* *ppNode可为&pNode */struct FsEbml_node* * const ppNode, /* *ppNode2可为&pNode,ppNode2不能与ppNode相同 */struct FsEbml_node* * const ppNode2
-            , FsEbml * const pEbml, struct FsEbml_node* pNode, /* pNode对应的描述节点 */struct FsEbml_node* pNode0, /* 截止节点 */ struct FsEbml_node * const endNode);
-
-    /* 在pNode可被清理时去除pEbml中的pNode节点及其父节点,如父节点为endNode则不清除,如遇*ppNode和*ppNode2把*ppNode和ppNode2设置为其描述节点,*pNode_new_contenParent储存pNode新上下文中pNode的父节点,pNode0可以不是pEbml的成员,返回处理的数量 */
-
-    unsigned int fs_Config_node_simple_change_ppNode2_and_new_contentParent(/* *ppNode可为&pNode */struct FsEbml_node* * const ppNode, /* *ppNode2可为&pNode,ppNode2不能与ppNode相同 */struct FsEbml_node* * const ppNode2
-            , /* pNode新上下文的父节点,仅在pEbml_nodeDst及子节点范围内查找,distance为0时不会对其赋值 */struct FsEbml_node * * const pNode_new_contenParent
-            , FsEbml * const pEbml, struct FsEbml_node* pNode, /* pNode对应的描述节点 */struct FsEbml_node* pNode0, /* 截止节点 */ struct FsEbml_node * const endNode);
-
-    /* 按pNode的父关系在pEbml_nodeDst中创建相同的层次结构,pNode可以不是pEbml的成员,返回按pNode的父关系创建的对应成员 */
-
-    struct FsEbml_node * fs_Config_node_simple_not(FsEbml * const pEbml, /* 可以不是pEbml的成员 */struct FsEbml_node* pNode, /* 起始节点 */ struct FsEbml_node * pEbml_nodeDst, /* pNode到pEbml_nodeDst的距离 */unsigned int distance);
-
-    /* 按pNode的父关系在pEbml_nodeDst中创建相同的层次结构,如遇*ppNode把*ppNode设置为其创建的新节点,pNode可以不是pEbml的成员,返回按pNode的父关系创建的对应成员 */
-
-    struct FsEbml_node * fs_Config_node_simple_not_change_ppNode(/* *ppNode可为&pNode */struct FsEbml_node* * const ppNode, FsEbml * const pEbml, /* 可以不是pEbml的成员 */struct FsEbml_node* pNode, /* 起始节点 */ struct FsEbml_node * pEbml_nodeDst, /* pNode到startNode的距离 */unsigned int distance);
-
-    /* 按pNode的父关系在pEbml_nodeDst中创建相同的层次结构,如遇*ppNode把*ppNode设置为其创建的新节点,*pNode_old_contenParent储存pNode原来上下文中pNode的父节点,pNode可以不是pEbml的成员,返回按pNode的父关系创建的对应成员 */
-
-    struct FsEbml_node * fs_Config_node_simple_not_change_ppNode_and_old_contentParent(/* *ppNode可为&pNode */struct FsEbml_node* * const ppNode, /* pNode原上下文的父节点,仅在pEbml_nodeDst及子节点范围内查找,distance为0时不会对其赋值 */struct FsEbml_node * * const pNode_old_contenParent
-            , FsEbml * const pEbml, /* 可以不是pEbml的成员 */struct FsEbml_node* pNode, /* 起始节点 */ struct FsEbml_node * pEbml_nodeDst, /* pNode到startNode的距离 */unsigned int distance);
-
-    /* 
-     * 获取pNode最合适的邻居节点;
-     * 找到返回1;
-     * 使用父节点返回2;
-     * 未找到返回0;
-     */
-
-    int fs_Config_node_prefect_neighbour(/* 储存找到的节点对应的描述节点,可以使用&pNode0,&pNode,&parent0,&parent */const struct FsEbml_node* * const ppNode0_rst, /* 储存找到的节点,可以使用&pNode0,&pNode,&parent0,&parent */const struct FsEbml_node* * const ppNode_rst
-            , /* node的父节点,同一个node因上下文不同结果不同,不包含node */const struct FsEbml_node * const ppNode_nodeParentList[], /* nodeParentList_中有多少个节点属于pNode的上下文 */const unsigned int nodeParentList_nodeCount
-            , const FsConfig * const pConfig, /* pNode对应的描述节点 */const struct FsEbml_node * const pNode0, const struct FsEbml_node * const pNode, /* 是否显示隐藏配置项,0-不显示,1-显示 */const unsigned char showHideConfig
-            , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
-
-    /* 
-     * 检查pConfig中当前显示的节点中与setNode存在关系的节点,加入的都是描述节点,把上下文一并加入,后加入此描述节点,最后以NULL结束;
-     * 把通过关系判断为真的存入*pCheckTrueHead_和*pCheckTrueTable_中;
-     * 把通过关系判断为假的存入*pCheckFalseHead_和*pCheckFalseTable_中;
-     * 存在head显示依赖的返回1;
-     * 存在table显示依赖的返回2;
-     * 同时存在head和table显示依赖返回3;
-     * 否则返回0
-     */
-
-    unsigned char fs_Config_getCheckList__IO_1_2_3_4(/* 在head中与setNode相关且有效的项 */FsObjectList * * const pCheckTrueHead_, /* 在head中与setNode相关且无效的项 */FsObjectList * * const pCheckFalseHead_
-            , /* 在table中与setNode相关且有效的项 */FsObjectList * * const pCheckTrueTable_, /* 在table中与setNode相关且无效的项 */FsObjectList * * const pCheckFalseTable_
-            , const FsConfig * const pConfig, /* 根节点的描述节点 */ const struct FsEbml_node * const templateNode0, /* 根节点 */const struct FsEbml_node * const templateNode
-            , /* 当前页面显示的节点的描述节点 */const struct FsEbml_node * tableNode0, /* 当前页面显示的节点,为templateNode时显示的是templateNode下非模板和节点型节点 */const struct FsEbml_node * tableNode
-            , /* 当前被设置的节点的描述节点 */ const struct FsEbml_node * const setNode0, /* 当前被设置的节点 */const struct FsEbml_node * const setNode
-            , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
 
 
 

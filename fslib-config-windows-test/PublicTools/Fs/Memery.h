@@ -272,8 +272,9 @@ extern "C" {
     /* 本函数在使用共享buffer的同时把共享buffer传给其他函数前调用,子函数调用后应调用FsLocal_ShareBuffer_call_after,共享buffer必须以FsLocal_ShareBuffer_init初始化 */
 
 #define FsLocal_ShareBuffer_call_before(/* 表示本函数使用的空间的结束位置相对于___FsShareBuffer的偏移量,不小于FsLocal_ShareBufferPos,没使用值应为FsLocal_ShareBufferPos */___pos) do{\
+    const unsigned int ___FsShareBufferPosNew=(unsigned int)(___pos);\
     if(NULL==___FsShareBuffer){\
-        ___FsShareBufferLen=((___pos)+63)&(~63U);\
+        ___FsShareBufferLen=(___FsShareBufferPosNew+63)&(~63U);\
         ___FsShareBuffer_old=___FsShareBuffer=(char*)fsMalloc(___FsShareBufferLen);\
         /* 修改*_ShareBuffer_var宏定义指针 */__FsLocal_ShareBuffer_var_reset(NULL,___FsShareBuffer);\
         /* 修改*_ShareBuffer_var_check宏定义指针 */__FsLocal_ShareBuffer_var_check_reset(NULL,NULL,___FsShareBuffer);\
@@ -284,9 +285,9 @@ extern "C" {
         /* 调试 */fs_ObjectList_insert_tail(Fs_ShareBuffer_debug_listInit(___FsShareBuffer), (void*) __FUNCTION__);\
     }\
     Fs_ShareBuffer_Len(___FsShareBuffer)=___FsShareBufferLen;\
-    Fs_ShareBuffer_pos(___FsShareBuffer)=(___pos);\
-    /* 调试 */if((unsigned int)(___pos)<FsLocal_ShareBufferPos){\
-        /* 调试 */FsPrintf(5, "Invalid ___pos(=%u/%u).\n",(unsigned int)(___pos),FsLocal_ShareBufferPos);\
+    Fs_ShareBuffer_pos(___FsShareBuffer)=___FsShareBufferPosNew;\
+    /* 调试 */if(___FsShareBufferPosNew<FsLocal_ShareBufferPos){\
+        /* 调试 */FsPrintf(5, "Invalid ___pos(=%u/%u).\n",___FsShareBufferPosNew,FsLocal_ShareBufferPos);\
         /* 调试 */FsErrorDump();\
     /* 调试 */}\
     /* 调试 */if(Fs_ShareBuffer_debug_listInit(___FsShareBuffer)->nodeCount!=Fs_ShareBuffer_debug_listCall(___FsShareBuffer)->nodeCount+1){\
@@ -421,6 +422,7 @@ extern "C" {
 #define fsMalloc(_Size) malloc(_Size)
 #define fsRealloc(_Memory,_Size) realloc(_Memory,_Size)
 #define fsFree(_Memory) free(_Memory)
+#define _fsFree free
 #endif
 
     /* 一个管理多个内存的对象,支持批量删除内存,删除顺序是倒序删除的 */

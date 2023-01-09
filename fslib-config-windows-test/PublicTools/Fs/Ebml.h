@@ -345,7 +345,8 @@ extern "C" {
 
     /* 删除pEbml指向的实例 */
 
-    void fs_Ebml_delete__OI(FsEbml * const pEbml, /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
+    void fs_Ebml_delete__OI(FsEbml * const pEbml
+            , /* 共享buffer,不可为空 */ FsShareBuffer * const pShareBuffer);
 
     /* 
      * 获取此EBML数据的真实长度;

@@ -62,7 +62,7 @@ LDLIBSOPTIONS=libfslib-config.so
 
 ./libfslib-config-test: ${OBJECTFILES}
 	${MKDIR} -p .
-	${LINK.c} -o ./libfslib-config-test ${OBJECTFILES} ${LDLIBSOPTIONS} -Wl,--gc-sections,-rpath,'$$ORIGIN' -lpthread -ldl -lm -lphplib
+	${LINK.c} -o ./libfslib-config-test ${OBJECTFILES} ${LDLIBSOPTIONS} -Wl,--gc-sections,-rpath,'$$ORIGIN' -lpthread -ldl -lm
 
 ${OBJECTDIR}/main.o: main.c
 	${MKDIR} -p ${OBJECTDIR}

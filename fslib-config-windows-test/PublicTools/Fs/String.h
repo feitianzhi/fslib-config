@@ -9,6 +9,7 @@
 #define STRING_H
 #include "../../PublicTools/publicDefine.h"
 #include <stdio.h>
+#include "../../PublicTools/Fs/Memery.h"
 #include "../../PublicTools/Fs/Object.h"
 #include "../../PublicTools/Fs/ObjectList.h"
 #ifdef __cplusplus
@@ -243,6 +244,12 @@ extern "C" {
     unsigned long fs_String_buffer_encode_by_base64_custom_from_string_reverse(/* 编码结果储存的空间,必须足够大 */unsigned char rstBuffer[],
             /* 数据开始指针位置 */const char buffer[], /* 数据长度,必须大于0 */register const unsigned long bufferLen, /* base64的编码码表,不能为空 */register const unsigned char base64[]);
     /*
+     * 把buffer用特定的Base64表进行编码(组内交换储存),编码过程倒序执行;
+     * 函数不会失败,返回编码后的长度.
+     */
+    unsigned long fs_String_buffer_encode_by_base64_custom_from_string_reverse_groupSwap(/* 编码结果储存的空间,必须足够大 */unsigned char rstBuffer[]
+            , /* 数据开始指针位置 */const char buffer[], /* 数据长度,必须大于0 */ const unsigned long bufferLen, /* base64的编码码表,不能为空 */ const unsigned char base64[]);
+    /*
      * 把buffer用预定义的Base64表进行编码;
      * 函数不会失败,返回编码后的长度.
      */
@@ -429,16 +436,22 @@ extern "C" {
     /* 获取buffer的md5校验值,结果为二进制数据,长度为16字节 */
     char *fs_String_buffer_md5sum__IO(/* 要校验的buffer的长度,可为0 */const unsigned long bufferLenth, /* 要校验的buffer,必须为4字节对齐,可为空 */const char buffer[]);
     /* 获取buffer的md5校验值,结果为字符串 */
-    void fs_String_buffer_md5sum_string(/* 结果储存的buffer,如果rst_32[0]为1结果用大写字母表示,否则用小写字母 */char rst_32[],
-            /* 要校验的buffer的长度,可为0 */const unsigned long bufferLenth, /* 要校验的buffer,必须为4字节对齐,可为空 */ const char buffer[]);
+    void fs_String_buffer_md5sum_string(/* 结果储存的buffer,如果rst_32[0]为1结果用大写字母表示,否则用小写字母 */char rst_32[]
+            , /* 要校验的buffer的长度,可为0 */const unsigned long bufferLenth, /* 要校验的buffer,必须为4字节对齐,可为空 */ const char buffer[]);
     /* 获取buffer的md5校验值,结果为字符串 */
-    char *fs_String_buffer_md5sum_string__IO(/* 要校验的buffer的长度,可为0 */const unsigned long bufferLenth,
-            /* 要校验的buffer,必须为4字节对齐,可为空 */ const char buffer[],
-            /* 为1表示结果中的字母用大写字母表示,其它表示用小写字母表示 */const char upper);
+    char *fs_String_buffer_md5sum_string__IO(/* 要校验的buffer的长度,可为0 */const unsigned long bufferLenth
+            , /* 要校验的buffer,必须为4字节对齐,可为空 */ const char buffer[], /* 为1表示结果中的字母用大写字母表示,其它表示用小写字母表示 */const char upper);
     /* 获取buffer的md5校验值,结果为二进制数据 */
     void fs_String_md5sum(/* 接收结果的缓存空间,大小为16字节 */ unsigned int rst_4[], /* buffer必须为4字节对齐 */const FsString *pString);
     /* 获取pString的md5校验值,结果为字符串 */
     char* fs_String_md5sum_string__IO(/* buffer必须为4字节对齐 */const FsString *pString, /* 为1表示结果中的字母用大写字母表示,其它表示用小写字母表示 */const char upper);
+    /* 计算3段数据的md5值md5sum(v1_cin:v2_cin:v3_cin),返回偏移量 */
+    unsigned int fs_String_buffer_md5sum3(/* v1 */const char v1_cin[], /* v1长度 */const unsigned int v1Len, /* v2 */const char v2_cin[], /* v2长度 */const unsigned int v2Len, /* v3 */const char v3_cin[], /* v3长度 */const unsigned int v3Len
+            , /* 共享buffer,不为空 */ FsShareBuffer * const pShareBuffer);
+    /* 计算4段数据的md5值md5sum(v1_cin:v2_cin:v3_cin:v4_cin),返回偏移量 */
+    unsigned int fs_String_buffer_md5sum4(/* v1 */const char v1_cin[], /* v1长度 */const unsigned int v1Len, /* v2 */const char v2_cin[], /* v2长度 */const unsigned int v2Len
+            , /* v3 */const char v3_cin[], /* v3长度 */const unsigned int v3Len, /* v4 */const char v4_cin[], /* v4长度 */const unsigned int v4Len
+            , /* 共享buffer,不为空 */ FsShareBuffer * const pShareBuffer);
     /* 获取buffer的sha1校验值,结果为二进制数据 */
     void fs_String_buffer_sha1(/* 接收结果的缓存空间,大小为20字节 */unsigned int rst_5[], /* 要校验的buffer的长度,不可为0 */ const unsigned long bufferLenth, /* 要校验的buffer,必须为4字节对齐,不可为空 */ const unsigned char buffer[]);
     /* 获取buffer的sha256校验值,结果为二进制数据 */

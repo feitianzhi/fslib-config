@@ -20,6 +20,7 @@
 ///////////////////////////定义公共函数开始//////////////////////////////////////
 
 int main(int argc, char** argv) {
+    globalInit(NULL, NULL, NULL, 0);
     // 创建配置
     FsConfig * const pConfig = fs_Config_new__IO();
     // 创建一个节点型节点
@@ -66,6 +67,31 @@ int main(int argc, char** argv) {
         /* 向condition_testString2添加一个条件,相对于testString2节点向上两级的父节点中查找node节点,再在node节点中查找testInt节电,在testInt的值为0时此值有效 */
         fs_Config_condition_add_static(pConfig, condition_testString2, 2, "node testInt", FsConfig_Condition_equal, "0");
     }
+    // 创建一个可以支持时间控制模板
+    void *const testTemplateTimControl = fs_Config_node_template_add(pConfig, pConfig, "testTemplateTimControl", "测试时间控制模板", NULL, NULL, "测试时间控制模板", NULL, NULL, "timerControl", 0, 0x7, 100);
+    {
+        {
+            void *const pNode = fs_Config_node_string_add(pConfig, testTemplateTimControl, "timerControl", "有效时间", "有效时间,时区+时间区间", 0, 0x7, 24, 33, 2);
+            fs_Config_node_string_add_value(pConfig, pNode, FsConfig_nodeValue_default, "+08 01-01/00:00:00 12-31/23:59:59", "+08 01-01/00:00:00 12-31/23:59:59", "每年");
+            fs_Config_node_string_add_value(pConfig, pNode, FsConfig_nodeValue_optional, "+08 00-01/00:00:00 00-31/23:59:59", "+08 00-01/00:00:00 00-31/23:59:59", "每月");
+            fs_Config_node_string_add_value(pConfig, pNode, FsConfig_nodeValue_optional, "+08 00-00/00:00:00 00-00/23:59:59", "+08 00-00/00:00:00 00-00/23:59:59", "每天");
+            fs_Config_node_string_add_value(pConfig, pNode, FsConfig_nodeValue_optional, "+08 00-00/24:00:00 00-00/24:59:59", "+08 00-00/24:00:00 00-00/24:59:59", "每时");
+            fs_Config_node_string_add_value(pConfig, pNode, FsConfig_nodeValue_optional, "+08 00-00/24:60:00 00-00/24:60:59", "+08 00-00/24:60:00 00-00/24:60:59", "每分");
+            fs_Config_node_string_add_value(pConfig, pNode, FsConfig_nodeValue_optional, "+08 1/00:00:00 7/23:59:59", "+08 1/00:00:00 7/23:59:59", "每周");
+        }
+        /* 在template下创建一个字符串节点,节点可以设置2个值,长度为0到10个字节 */
+        void *const testString1 = fs_Config_node_string_add(pConfig, testTemplateTimControl, "testString1", "测试字符串1", "测试字符串1", 0, 0x7, 0, 10, 2);
+        /* 为testString1添加一个默认值 */
+        fs_Config_node_string_add_value(pConfig, testString1, FsConfig_nodeValue_default, "default1", "默认值1", "默认值1");
+        /* 为testString1添加一个可选值 */
+        fs_Config_node_string_add_value(pConfig, testString1, FsConfig_nodeValue_optional, "optiona1", "可选值1", "可选值1");
+        /* 在template下创建一个字符串节点,节点可以设置2个值,长度为0到10个字节 */
+        void *const testString2 = fs_Config_node_string_add(pConfig, testTemplateTimControl, "testString2", "测试字符串2", "测试字符串2", 0, 0x7, 0, 10, 2);
+        /* 为testString2创建一个条件组 */
+        void *const condition_testString2 = fs_Config_condition_group_add(pConfig, testString2);
+        /* 向condition_testString2添加一个条件,相对于testString2节点向上两级的父节点中查找node节点,再在node节点中查找testInt节电,在testInt的值为0时此值有效 */
+        fs_Config_condition_add_static(pConfig, condition_testString2, 2, "node testInt", FsConfig_Condition_equal, "0");
+    }
     // 把配置保存到文件,可使用小雉配置工具打开编辑
     // 项目中可把配置发送给客户端
     fs_Config_save_to_file_direct(pConfig, "test.cfg");
@@ -73,12 +99,14 @@ int main(int argc, char** argv) {
     {
         const char *str = "<testTemplate><testString1>sss1</testString1></testTemplate>"
                 "<testTemplate><testString2>ssss2</testString2></testTemplate>"
-                "<node><testInt>30</testInt><testFloat>0.5</testFloat></node>";
+                "<node><testInt>30</testInt><testFloat>0.5</testFloat></node>"
+                /* 定义每年1月1日至1月31日有效 */ "<testTemplateTimControl><timerControl>+08 01-01/00:00:00 1-31/23:59:59</timerControl><testString2>tttt2</testString2></testTemplateTimControl>"
+                /* 定义每每周1到周日都有效 */ "<testTemplateTimControl><timerControl>+08 1/00:00:00 7/23:59:59</timerControl><testString2>tttt7</testString2></testTemplateTimControl>";
         FsXml *pXml = fs_Xml_new_from_string__IO(str, NULL);
         fs_Xml_analyzeAll(pXml, (struct FsXml_node*) pXml, NULL);
         FsEbml *pEbml1 = fs_Ebml_new_from_Xml__IO(pXml);
         fs_Xml_delete__OI(pXml, NULL);
-        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pEbml1, (struct FsEbml_node*) pEbml1,0xFFFFFFFFFFFFFFFFLLU, NULL);
+        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pEbml1, (struct FsEbml_node*) pEbml1, 0xFFFFFFFFFFFFFFFFLLU, NULL);
         fs_Ebml_delete__OI(pEbml1, NULL);
     }
     // 当前pConfig已包含导入的数据,可存盘
@@ -86,7 +114,7 @@ int main(int argc, char** argv) {
     // 读取历史的配置文件"test1.cfg",按目前在申明导入到pConfig中
     {
         FsConfig * const pConfig1 = fs_Config_new_from_file__IO("test1.cfg", NULL);
-        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pConfig1, (struct FsEbml_node*) pConfig1, 0xFFFFFFFFFFFFFFFFLLU,NULL);
+        fs_Config_import_onlyData((FsEbml*) pConfig, (struct FsEbml_node*) pConfig, (struct FsEbml_node*) pConfig, (FsEbml*) pConfig1, (struct FsEbml_node*) pConfig1, 0xFFFFFFFFFFFFFFFFLLU, NULL);
         fs_Config_delete__OI(pConfig1, NULL);
     }
     /* 把pConfig导出为json */
@@ -106,15 +134,30 @@ int main(int argc, char** argv) {
      *     },{
      *         "testString1":"default1",
      *         "testString2":"ssss2"
-     *     }]
+     *     }],
+     *    "testTemplateTimControl":[{
+     *        "timerControl":"+08 01-01/00:00:00 1-1/23:59:59",
+     *        "testString1":"default1",
+     *         "testString2":"tttt2"
+     *    },{
+     *        "timerControl":"+08 1/00:00:00 7/23:59:59",
+     *        "testString1":"default1",
+     *        "testString2":"tttt7"
+     *    }]
      * }
      */
     /* 读取node testInt的值,打印结果为testInt=30 */
     printf("testInt=%lld\n", fs_Config_node_integer_get_first(pConfig, pConfig, pConfig, "node testInt", 0, NULL));
     /* 读取node testFloat的值,打印结果为testFloat=0.500000 */
     printf("testFloat=%lf\n", fs_Config_node_float_get_first(pConfig, pConfig, pConfig, "node testFloat", 0, NULL));
+    /* 读取testTemplateTimControl模板实例子,每年1月1日至1月31日打印结果为testTemplateTimControl Count=2,其余时候打印结果为testTemplateTimControl Count=1 */
+    const void *testTemplateTimControl0 = pConfig;
+    FsObjectList * const list = fs_Config_node_template__IO(pConfig, &testTemplateTimControl0, pConfig, 3, NULL, 0, "testTemplateTimControl");
+    printf("testTemplateTimControl Count=%lu\n", list != NULL ? list->nodeCount : 0);
+    if (list)fs_ObjectList_delete__OI(list);
     pObjectBase->_delete(pObjectBase);
     fs_Config_delete__OI(pConfig, NULL);
+    globalRelease();
     getchar();
     return EXIT_SUCCESS;
 }

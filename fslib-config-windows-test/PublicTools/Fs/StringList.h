@@ -78,12 +78,12 @@ extern "C" {
      * 成功返回插入的位置索引,从0开始;
      * 失败返回-1.
      */
-    long fs_StringList_insert_order(FsStringList* pStringList, /* 要插入的字符串,不能为空 */const char str[]
+    long fs_StringList_insert_order(FsStringList * const pStringList, /* 要插入的字符串,不能为空 */const char str[]
             , /* 排序的比较函数,数据按比较结果从小到大排序:
-             *     str1>str2返回1;
-             *     str1=str2返回0
-             *     否则返回-1;
-             */signed char (*orderCompare)(const char str1[], const char str2[]));
+         *     str1>str2返回1;
+         *     str1=str2返回0
+         *     否则返回-1;
+         */int (*const orderCompare) (const char str1[], const char str2[]));
     /*
      * 把str按顺序插入到pStringList;
      * 成功返回插入的位置索引,从0开始;
@@ -101,12 +101,12 @@ extern "C" {
      * 成功返回插入的位置索引,从0开始;
      * 失败返回-1.
      */
-    long fs_StringList_insert_order__OI_2(FsStringList* pStringList, /* 要插入的字符串,不能为空 */const char str[],
-            /* 排序的比较函数,数据按比较结果从小到大排序:
-             *     str1>str2返回1;
-             *     str1=str2返回0
-             *     否则返回-1;
-             */signed char (*orderCompare)(const char str1[], const char str2[]));
+    long fs_StringList_insert_order__OI_2(FsStringList* pStringList, /* 要插入的字符串,不能为空 */const char str[]
+            , /* 排序的比较函数,数据按比较结果从小到大排序:
+         *     str1>str2返回1;
+         *     str1=str2返回0
+         *     否则返回-1;
+         */int (*const orderCompare) (const char str1[], const char str2[]));
     /*
      * 把str拷贝一份插入到pStringList的尾部;
      * 成功返回1;

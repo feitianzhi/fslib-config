@@ -72,20 +72,20 @@ extern "C" {
      * 获取指定目录下指定后缀的所有文件名;
      * 成功且有数据返回FsStringList对象,否则返回NULL.
      */
-    FsStringList *fs_dir_get_fileName_match_with_order__IO(/* 全路径的目录名, 必须以"/"结尾 */const char dirName[],
-            /* 文件名匹配的函数指针,匹配返回1,不匹配返回-1 */signed char (*match)(const char fileName[]),
-            /* 排序的比较函数,数据按比较结果从小到大排序:
-             *     str1>str2返回1;
-             *     str1=str2返回0
-             *     否则返回-1;
-             */signed char (*orderCompare)(const char str1[], const char str2[]));
+    FsStringList * fs_dir_get_fileName_match_with_order__IO(/* 全路径的目录名, 必须以"/"结尾 */const char dirName[]
+            , /* 文件名匹配的函数指针,匹配返回1,不匹配返回-1 */int (*const match) (const char fileName[])
+            , /* 排序的比较函数,数据按比较结果从小到大排序:
+         *     str1>str2返回1;
+         *     str1=str2返回0
+         *     否则返回-1;
+         */int (*const orderCompare) (const char str1[], const char str2[]));
 
     /* 
      * 获取指定目录下指定后缀的所有文件名(绝对路径);
      * 成功且有数据返回FsStringList对象,否则返回NULL.
      */
-    FsStringList *fs_dir_get_fileName_all_match(/* 全路径的目录名, 必须以"/"结尾 */ const char dirName[],
-            /* 文件名匹配的函数指针,匹配返回1,不匹配返回-1 */signed char (*match)(const char fileName[]));
+    FsStringList * fs_dir_get_fileName_all_match(/* 全路径的目录名, 必须以"/"结尾 */ const char dirName[]
+            , /* 文件名匹配的函数指针,匹配返回1,不匹配返回-1 */int (*const match) (const char fileName[]));
     /* 
      * 获取指定目录下指定后缀的所有文件名(绝对路径);
      * 成功且有数据返回FsStringList对象,否则返回NULL.
@@ -96,23 +96,23 @@ extern "C" {
      * 获取指定目录下指定后缀的所有文件名;
      * 成功且有数据返回FsStringList对象,否则返回NULL.
      */
-    FsStringList *fs_dir_get_fileName_all_match_with_order__IO(/* 全路径的目录名, 必须以"/"结尾 */const char dirName[],
-            /* 文件名匹配的函数指针,匹配返回1,不匹配返回-1 */signed char (*match)(const char fileName[]),
-            /* 排序的比较函数,数据按比较结果从小到大排序:
+    FsStringList *fs_dir_get_fileName_all_match_with_order__IO(/* 全路径的目录名, 必须以"/"结尾 */const char dirName[]
+            , /* 文件名匹配的函数指针,匹配返回1,不匹配返回-1 */int (*const match) (const char fileName[])
+            , /* 排序的比较函数,数据按比较结果从小到大排序:
              *     str1>str2返回1;
              *     str1=str2返回0
              *     否则返回-1;
-             */signed char (*orderCompare)(const char str1[], const char str2[]));
+             */int (*const orderCompare) (const char str1[], const char str2[]));
     /* 
      * 获取指定目录下指定后缀的所有文件名;
      * 成功且有数据返回FsStringList对象,否则返回NULL.
      */
-    FsStringList *fs_dir_get_fileName_all_with_suffix_order__IO(/* 全路径的目录名, 必须以"/"结尾 */const char dirName[], /* 文件的后缀,不能为空,区分大小写,如.jpg */const char suffix[],
-            /* 排序的比较函数,数据按比较结果从小到大排序:
+    FsStringList *fs_dir_get_fileName_all_with_suffix_order__IO(/* 全路径的目录名, 必须以"/"结尾 */const char dirName[], /* 文件的后缀,不能为空,区分大小写,如.jpg */const char suffix[]
+            , /* 排序的比较函数,数据按比较结果从小到大排序:
              *     str1>str2返回1;
              *     str1=str2返回0
              *     否则返回-1;
-             */signed char (*orderCompare)(const char str1[], const char str2[]));
+             */int (*orderCompare)(const char str1[], const char str2[]));
     /* 
      * 获取指定目录下的一个目录名(非全路径);
      * 成功返回1;
@@ -149,6 +149,10 @@ extern "C" {
      */
     int fs_file_md5sum(/* 接收结果的缓存空间,大小为16字节 */unsigned int rst_4[], /* 文件名字,不能为空 */const char fileName[]);
     /* 
+     * 调整文件大小,成功返回1,失败返回-1;
+     */
+    int fs_file_resize(const char fileName[], const unsigned long size);
+    /* 
      * 计算文件的MD5值,结果为字符串;
      * 成功返回1;
      * 文件操作失败返回-1.
@@ -167,7 +171,7 @@ extern "C" {
      * 打开文件夹失败返回-1;
      * 校验文件失败返回-2.
      */
-    int fs_dir_md5sum(/* 接收结果的缓存空间,大小为16字节 */unsigned int rst_4[], /* 文件夹名字,不能为空 */const char dirName[]
+    int fs_dir_md5sum(/* 接收结果的缓存空间,大小为16字节 */unsigned int rst_4[], /* 文件夹名字,不能为空 */const char dirName_cin[]
             , /* 共享buffer,可为空 */ FsShareBuffer * const pShareBuffer);
     /*
      * 计算文件夹内数据的md5校验值,结果为字符串(只支持普通目录和普通文件,不能支持软连接和硬连接);

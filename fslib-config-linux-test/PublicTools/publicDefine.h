@@ -48,6 +48,7 @@
 #define FsStackBase 8*1024*1024 // 线程堆栈的基础大小
 #define FsWaitSyncDo() usleep(1)
 #define FsReconnectTime 2.0 // 重连的时间间隔
+#define FsFileSizeRatio 1.01 // 文件实际占用空间与文件真实大小的比值
 ////////////////////////////////////////////////////////////////////////////////
 
 /* tcp调用send函数时一次最大发送的数据量 */

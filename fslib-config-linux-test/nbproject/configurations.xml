@@ -79,7 +79,7 @@
           <linkerLibItems>
             <linkerLibFileItem>libfslib-config.so</linkerLibFileItem>
           </linkerLibItems>
-          <commandLine>-Wl,--gc-sections,-rpath,'$$ORIGIN' -lpthread -ldl -lm -lphplib</commandLine>
+          <commandLine>-Wl,--gc-sections,-rpath,'$$ORIGIN' -lpthread -ldl -lm</commandLine>
         </linkerTool>
       </compileType>
       <item path="PublicTools/Fs/Calculation.h" ex="false" tool="3" flavor2="0">

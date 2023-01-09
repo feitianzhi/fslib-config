@@ -14,11 +14,9 @@
         <itemPath>PublicTools/Fs/Object.h</itemPath>
         <itemPath>PublicTools/Fs/ObjectList.h</itemPath>
         <itemPath>PublicTools/Fs/Router.h</itemPath>
-        <itemPath>PublicTools/Fs/Socket.h</itemPath>
         <itemPath>PublicTools/Fs/String.h</itemPath>
         <itemPath>PublicTools/Fs/StringBuilder.h</itemPath>
         <itemPath>PublicTools/Fs/StringList.h</itemPath>
-        <itemPath>PublicTools/Fs/SystemInfo.h</itemPath>
         <itemPath>PublicTools/Fs/Time.h</itemPath>
         <itemPath>PublicTools/Fs/Xml.h</itemPath>
       </logicalFolder>
@@ -103,15 +101,11 @@
       </item>
       <item path="PublicTools/Fs/Router.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="PublicTools/Fs/Socket.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="PublicTools/Fs/String.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PublicTools/Fs/StringBuilder.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PublicTools/Fs/StringList.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="PublicTools/Fs/SystemInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PublicTools/Fs/Time.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -171,15 +165,11 @@
       </item>
       <item path="PublicTools/Fs/Router.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="PublicTools/Fs/Socket.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="PublicTools/Fs/String.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PublicTools/Fs/StringBuilder.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PublicTools/Fs/StringList.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="PublicTools/Fs/SystemInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PublicTools/Fs/Time.h" ex="false" tool="3" flavor2="0">
       </item>
